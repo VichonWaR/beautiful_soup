@@ -9,19 +9,19 @@ kwords = ['python','security','clearance','military','database','mysql','remote'
 # html url 
 url = "https://www.indeed.com/jobs?as_and=python&as_phr&as_any&as_not&as_ttl&as_cmp&jt=all&st&salary&radius=0&l=Sacramento%2C%20CA&fromage=any&limit=50&sort&psf=advsrch&from=advancedsearch&vjk=3e2c26d1eeb5673f"
 
-# pull data from html page
+# pull data from html page / second attr to only pull english
 headers = {"Accept-Language": "en-US, en;q=0.5"}
 response = requests.get(url, headers=headers)
 
-# sending data from page to Beautiful soup 
+# sending data from page to Beautiful soup / had to import html5 into system to use
 soup = BeautifulSoup(response.content, 'html5lib')
 
-# selecting ID data I pull
+# selecting ID data I pull / job_descript only pulls NonType ((( needs fixing!!!! )))
 results = soup.find(id='resultsCol')
 job_descriptions = soup.find('div', class_ ='jobsearch-jobDescriptionText', recurisive=True)
 
 
-# pulling further actual jobs from the class
+# pulling further actual jobs from the class / this is to dive deeper into html
 jobs = results.find_all('div', class_='result')
 #descriptions = job_descriptions.find_all('div', class_ ='jobsearch-jobDescriptionText', recursive=True)
 pays = results.find_all('div', class_='salarySnippet')
@@ -41,6 +41,8 @@ print(len(jobs))
 #print(link_text.strip())
 # all together now
 #job_description = [description.find_all('div').text.strip() for description in descriptions]
+
+# was pulling 50, indexed to pull 2 titles for troubleshooting / pay works but not all blocks come with pay - so unmathicng results with titles pull
 job_titles = [job.find('h2').find('a').text.strip() for job in jobs[:2]]
 job_pay = [pay.find('span').find('span').text.strip()for pay in pays]
 
